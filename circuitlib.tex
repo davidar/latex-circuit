@@ -3,8 +3,11 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows}
 
+\tikzstyle{fliphorz} = [xscale=-1] % reflect left to right
+\tikzstyle{flipvert} = [yscale=-1] % reflect top to bottom
+
 \newcommand{\led}[2][]{
- \begin{scope}[shift={(#2)},{#1}]
+ \begin{scope}[shift={(#2)},#1]
   \draw (0,0) -- (0,-0.5);
   \filldraw[fill=white] (0.1,-0.1) -- (-0.1,-0.1) -- (0,-0.4) -- cycle;
   \draw (0.1,-0.4) -- (-0.1,-0.4);
@@ -14,17 +17,17 @@
 }
 
 \newcommand{\capacitor}[2][]{
- \begin{scope}[shift={(#2)},{#1}]
-  \draw (0,0) -- (1,0);
-  \filldraw[white,fill=white] (0.45,0.2) rectangle (0.55,-0.2);
-  \draw (0.55,0.2) -- (0.55,-0.2);
-  \draw (0.65,0.15) node {+};
-  \draw (0.45,0.2) -- (0.45,-0.2);
+ \begin{scope}[shift={(#2)},#1]
+  \draw (0,0) -- (0,-1);
+  \filldraw[white,fill=white] (0.2,-0.45) rectangle (-0.2,-0.55);
+  \draw (0.2,-0.55) -- (-0.2,-0.55);
+  \draw (0.15,-0.35) node {+};
+  \draw (0.2,-0.45) -- (-0.2,-0.45);
  \end{scope}
 }
 
 \newcommand{\transistor}[2][]{
- \begin{scope}[shift={(#2)},{#1}]
+ \begin{scope}[shift={(#2)},#1]
   \draw (0,0) -- (0,-1); % CE
   \filldraw[fill=white] (-0.1,-0.5) circle (0.25);
   \draw (-0.5,-0.5) -- (-0.25,-0.5); % B
@@ -35,24 +38,27 @@
 }
 
 \newcommand{\crossover}[2][]{
- \begin{scope}[shift={(#2)},{#1}]
+ \begin{scope}[shift={(#2)},#1]
   \filldraw[white,fill=white] (0,0) circle (0.05);
   \draw (-0.05,0) arc (180:0:0.05);
  \end{scope}
 }
 
 \newcommand{\resistor}[2][]{
- \begin{scope}[shift={(#2)},{#1}]
+ \begin{scope}[shift={(#2)},#1]
+  \draw (0,0) -- (0,-0.2) -- (0.1,-0.25) -- (-0.1,-0.35) -- (0.1,-0.45) -- (-0.1,-0.55) -- (0.1,-0.65) -- (-0.1,-0.75) -- (0,-0.8) -- (0,-1);
+ \end{scope}
+}
+
+\newcommand{\resistorbox}[2][]{
+ \begin{scope}[shift={(#2)},#1]
   \draw (0,0) -- (0,-1);
   \filldraw[fill=white] (-0.1,-0.2) rectangle (0.1,-0.8);
  \end{scope}
 }
 
-\newcommand{\vrail}[2][]{
- \begin{scope}[{#1}]
-  \draw (0,0) node[left] {#2} circle (0.05);
-  \draw (0.05,0) -- (0.5,0);
+\newcommand{\vrail}[3][]{
+ \begin{scope}[shift={(#3)},#1]
+  \draw[o-] (0,0) node[left] {#2} -- (0.5,0);
  \end{scope}
 }
-\newcommand{\vrailnine}[2][]{\vrail[shift={(#2)},{#1}]{9V}}
-\newcommand{\vrailzero}[2][]{\vrail[shift={(#2)},{#1}]{0V}}
