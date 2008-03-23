@@ -5,35 +5,50 @@
 
 \tikzstyle{fliphorz} = [xscale=-1] % reflect left to right
 \tikzstyle{flipvert} = [yscale=-1] % reflect top to bottom
+\tikzstyle{component top} = []
+\tikzstyle{component bottom} = []
+\tikzstyle{component base} = []
 
 \newcommand{\led}[2][]{
  \begin{scope}[shift={(#2)},#1]
-  \draw (0,0) -- (0,-0.5);
-  \filldraw[fill=white] (0.1,-0.1) -- (-0.1,-0.1) -- (0,-0.4) -- cycle;
-  \draw (0.1,-0.4) -- (-0.1,-0.4);
-  \draw[->,>=stealth] (0.15,-0.2) -- (0.25,-0.3);
-  \draw[->,>=stealth] (0.15,-0.3) -- (0.25,-0.4);
+  \begin{scope}[component top]
+   \draw[opacity=1.0] (0,0) -- (0,-0.1);
+   \filldraw[opacity=0.5,fill=white] (0.1,-0.1) -- (-0.1,-0.1) -- (0,-0.4) -- cycle;
+   \draw[opacity=0.66,->,>=stealth] (0.15,-0.2) -- (0.25,-0.3);
+   \draw[opacity=0.33,->,>=stealth] (0.15,-0.3) -- (0.25,-0.4);
+   \draw[opacity=0.0] (0.1,-0.4) -- (-0.1,-0.4);
+   \draw[opacity=0.0] (0,-0.4) -- (0,-0.5);
+  \end{scope}
+  \begin{scope}[component bottom]
+   \draw[opacity=0.0] (0,0) -- (0,-0.1);
+   \filldraw[opacity=0.5,fill=white] (0.1,-0.1) -- (-0.1,-0.1) -- (0,-0.4) -- cycle;
+   \draw[opacity=0.33,->,>=stealth] (0.15,-0.2) -- (0.25,-0.3);
+   \draw[opacity=0.66,->,>=stealth] (0.15,-0.3) -- (0.25,-0.4);
+   \draw[opacity=1.0] (0.1,-0.4) -- (-0.1,-0.4);
+   \draw[opacity=1.0] (0,-0.4) -- (0,-0.5);
+  \end{scope}
  \end{scope}
 }
 
 \newcommand{\capacitor}[2][]{
  \begin{scope}[shift={(#2)},#1]
-  \draw (0,0) -- (0,-1);
-  \filldraw[white,fill=white] (0.2,-0.45) rectangle (-0.2,-0.55);
-  \draw (0.2,-0.55) -- (-0.2,-0.55);
-  \draw (0.15,-0.35) node {+};
-  \draw (0.2,-0.45) -- (-0.2,-0.45);
+  \draw[component top] (0,0) -- (0,-0.45);
+  \draw[component top] (0.15,-0.35) node {+};
+  \draw[component top] (0.2,-0.45) -- (-0.2,-0.45);
+  \draw[component bottom] (0.2,-0.55) -- (-0.2,-0.55);
+  \draw[component bottom] (0,-0.55) -- (0,-1);
  \end{scope}
 }
 
 \newcommand{\transistor}[2][]{
  \begin{scope}[shift={(#2)},#1]
-  \draw (0,0) -- (0,-1); % CE
   \filldraw[fill=white] (-0.1,-0.5) circle (0.25);
-  \draw (-0.5,-0.5) -- (-0.25,-0.5); % B
-  \draw (-0.25,-0.35) -- (-0.25,-0.65); % B plate
-  \draw (-0.25,-0.45) -- (0,-0.271); % BC
-  \draw[->,>=stealth] (-0.25,-0.55) -- (0,-0.729); % BE
+  \draw[component top] (0,0) -- (0,-0.271); % C
+  \draw[component top] (-0.25,-0.45) -- (0,-0.271); % BC
+  \draw[component base] (-0.5,-0.5) -- (-0.25,-0.5); % B
+  \draw[component base] (-0.25,-0.35) -- (-0.25,-0.65); % B plate
+  \draw[component bottom,->,>=stealth] (-0.25,-0.55) -- (0,-0.729); % BE
+  \draw[component bottom] (0,-0.729) -- (0,-1); % E
  \end{scope}
 }
 
@@ -46,14 +61,37 @@
 
 \newcommand{\resistor}[2][]{
  \begin{scope}[shift={(#2)},#1]
-  \draw (0,0) -- (0,-0.2) -- (0.1,-0.25) -- (-0.1,-0.35) -- (0.1,-0.45) -- (-0.1,-0.55) -- (0.1,-0.65) -- (-0.1,-0.75) -- (0,-0.8) -- (0,-1);
+  \begin{scope}[component top]
+   \draw [opacity=1.0] (0,0) -- (0,-0.2);
+   \draw [opacity=0.875] (0,-0.2) -- (0.1,-0.25);
+   \draw [opacity=0.75] (0.1,-0.25) -- (-0.1,-0.35);
+   \draw [opacity=0.625] (-0.1,-0.35) -- (0.1,-0.45);
+   \draw [opacity=0.5] (0.1,-0.45) -- (-0.1,-0.55);
+   \draw [opacity=0.375] (-0.1,-0.55) -- (0.1,-0.65);
+   \draw [opacity=0.25] (0.1,-0.65) -- (-0.1,-0.75);
+   \draw [opacity=0.125] (-0.1,-0.75) -- (0,-0.8);
+   \draw [opacity=0.0] (0,-0.8) -- (0,-1);
+  \end{scope}
+  \begin{scope}[component bottom]
+   \draw [opacity=0.0] (0,0) -- (0,-0.2);
+   \draw [opacity=0.125] (0,-0.2) -- (0.1,-0.25);
+   \draw [opacity=0.25] (0.1,-0.25) -- (-0.1,-0.35);
+   \draw [opacity=0.375] (-0.1,-0.35) -- (0.1,-0.45);
+   \draw [opacity=0.5] (0.1,-0.45) -- (-0.1,-0.55);
+   \draw [opacity=0.625] (-0.1,-0.55) -- (0.1,-0.65);
+   \draw [opacity=0.75] (0.1,-0.65) -- (-0.1,-0.75);
+   \draw [opacity=0.875] (-0.1,-0.75) -- (0,-0.8);
+   \draw [opacity=1.0] (0,-0.8) -- (0,-1);
+  \end{scope}
  \end{scope}
 }
 
 \newcommand{\resistorbox}[2][]{
  \begin{scope}[shift={(#2)},#1]
-  \draw (0,0) -- (0,-1);
-  \filldraw[fill=white] (-0.1,-0.2) rectangle (0.1,-0.8);
+  \draw[component top] (0,0) -- (0,-0.2);
+  \filldraw[fill=white,opacity=0.5,component top]    (-0.1,-0.2) rectangle (0.1,-0.8);
+  \draw[opacity=0.5,component bottom] (-0.1,-0.2) rectangle (0.1,-0.8);
+  \draw[component bottom] (0,-0.8) -- (0,-1);
  \end{scope}
 }
 
