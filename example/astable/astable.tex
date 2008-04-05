@@ -1,0 +1,166 @@
+\documentclass{article}
+
+\usepackage[a4paper,left=2.25cm,right=2.25cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+\title{Astable Multivibrator}
+\author{David Roberts}
+\date{}
+
+\usepackage{tikz}
+\input{../../circuitlib.tex}
+
+\begin{document}
+ \maketitle
+ 
+ \begin{figure}[h!]
+  \begin{center}
+   \begin{tikzpicture}[scale=3.5]
+    \vrail{9V}{-2,0}  \draw (-1.5,0) -- (1.5,0);
+    \vrail{0V}{-2,-3} \draw (-1.5,-3) -- (1.5,-3);
+    
+    \resistor{-1.5,0}    \draw (-1.5,-0.5) node[left=8pt] {$R_1$} node[right=8pt] {390\ohm};
+    \resistor{-0.5,-0.5} \draw (-0.5,-1)   node[left=8pt] {$R_2$} node[right=8pt] {22k\ohm};
+     \draw (-0.5,0) -- (-0.5,-0.5);
+     \draw (-0.5,-1.5) -- (-0.5,-2);
+    \resistor{0.5,-0.5}  \draw (0.5,-1)    node[left=8pt] {$R_3$} node[right=8pt] {22k\ohm};
+     \draw (0.5,0) -- (0.5,-0.5);
+     \draw (0.5,-1.5) -- (0.5,-2);
+    \resistor{1.5,0}     \draw (1.5,-0.5)  node[left=8pt] {$R_4$} node[right=8pt] {390\ohm};
+    
+    \led[fliphorz]{-1.5,-1} \draw (-1.5,-1.5) -- (-1.5,-2);
+    \led{1.5,-1}            \draw (1.5,-1.5) -- (1.5,-2);
+    
+    \capacitor[rotate={90}]{-1.5,-2}          \draw (-1,-1.8) node[above] {$C_1$ 47\micro F};
+    \capacitor[flipvert,rotate={270}]{1.5,-2} \draw (1,-1.8) node[above] {$C_2$ 47\micro F};
+    
+    \transistor[fliphorz]{-1.5,-2} \draw (-1.65,-2.5) node[left] {$Q_1$};
+    \transistor{1.5,-2}            \draw (1.65,-2.5) node[right] {$Q_2$};
+    
+    % bases to capacitors
+    \draw (-1,-2.5) -- (-0.5,-2.5) -- (0.5,-2); \crossover[rotate=22.5]{0,-2.25}
+    \draw (1,-2.5) -- (0.5,-2.5) -- (-0.5,-2);
+   \end{tikzpicture}
+   \caption{Circuit Diagram}
+  \end{center}
+ \end{figure}
+ 
+ \begin{figure}
+  \begin{center}
+   \begin{tikzpicture}[scale=2]
+    \tikzstyle{voltpos} = [very thick]
+    \tikzstyle{voltmedpos} = [thick]
+    \tikzstyle{voltsmallpos} = []
+    \tikzstyle{voltground} = [dashed]
+    \tikzstyle{voltneg} = [dotted]
+    
+    \vrail[voltpos]{+V}{-2,0}     \draw[voltpos] (-1.5,0) -- (1.5,0);
+    \vrail[voltground]{0V}{-2,-3} \draw[voltground] (-1.5,-3) -- (1.5,-3);
+    
+    \tikzstyle{component top} = [voltpos] \tikzstyle{component bottom} = [voltmedpos]
+     \resistor{-1.5,0}
+    \tikzstyle{component top} = [voltpos] \tikzstyle{component bottom} = [voltneg]
+     \resistor{-0.5,-0.5}
+     \draw[voltpos] (-0.5,0) -- (-0.5,-0.5);
+     \draw[voltneg] (-0.5,-1.5) -- (-0.5,-2);
+    \tikzstyle{component top} = [voltpos] \tikzstyle{component bottom} = [voltsmallpos]
+     \resistor{0.5,-0.5}
+     \draw[voltpos] (0.5,0) -- (0.5,-0.5);
+     \draw[voltsmallpos] (0.5,-1.5) -- (0.5,-2);
+    \tikzstyle{component top} = [voltpos] \tikzstyle{component bottom} = [voltpos]
+     \resistor{1.5,0}
+    
+    \tikzstyle{component top} = [voltmedpos] \tikzstyle{component bottom} = [voltground]
+     \led[fliphorz]{-1.5,-1}
+     \draw[voltground] (-1.5,-1.5) -- (-1.5,-2);
+     \fill[black,opacity=0.1] (-1.5,-1.25) circle (0.3);
+    \tikzstyle{component top} = [voltpos]    \tikzstyle{component bottom} = [voltpos]
+     \led{1.5,-1}
+     \draw[voltpos] (1.5,-1.5) -- (1.5,-2);
+    
+    \tikzstyle{component top} = [voltground] \tikzstyle{component bottom} = [voltneg]
+     \capacitor[rotate={90}]{-1.5,-2}
+    \tikzstyle{component top} = [voltpos]    \tikzstyle{component bottom} = [voltsmallpos]
+     \capacitor[flipvert,rotate={270}]{1.5,-2}
+    
+    \tikzstyle{component top} = [voltground] \tikzstyle{component bottom} = [voltground] \tikzstyle{component base} = [voltsmallpos]
+     \transistor[fliphorz]{-1.5,-2}
+    \tikzstyle{component top} = [voltpos]    \tikzstyle{component bottom} = [voltground] \tikzstyle{component base} = [voltneg]
+     \transistor{1.5,-2}
+    
+    % bases to capacitors
+    \draw[voltsmallpos] (-1,-2.5) -- (-0.5,-2.5) -- (0.5,-2); \crossover[voltsmallpos,rotate={22.5}]{0,-2.25}
+    \draw[voltneg] (1,-2.5) -- (0.5,-2.5) -- (-0.5,-2);
+    
+    % legend
+    \begin{scope}[shift={(2,-1)}]
+     \draw[voltpos]      (0,0) -- (0.5,0)   node[right] {supply voltage};
+     \draw[voltmedpos]   (0,-0.25) -- (0.5,-0.25) node[right] {positive voltage ($<$ supply voltage)};
+     \draw[voltsmallpos] (0,-0.5) -- (0.5,-0.5) node[right] {cut-in voltage (0.6V)};
+     \draw[voltground]   (0,-0.75) -- (0.5,-0.75) node[right] {ground (0V)};
+     \draw[voltneg]      (0,-1) -- (0.5,-1) node[right] {negative voltage};
+    \end{scope}
+   \end{tikzpicture}
+   \caption{Voltages --- Greyscale}
+  \end{center}
+ \end{figure}
+ 
+ \begin{figure}
+  \begin{center}
+   \begin{tikzpicture}[scale=2]
+    \tikzstyle{voltpos} = [green!50!yellow]
+    \tikzstyle{voltsmallpos} = [green!50!black]
+    \tikzstyle{voltmedpos} = [green]
+    \tikzstyle{voltneg} = [red]
+    \tikzstyle{voltground} = [blue]
+    
+    \vrail[voltpos]{+V}{-2,0}     \draw[voltpos] (-1.5,0) -- (1.5,0);
+    \vrail[voltground]{0V}{-2,-3} \draw[voltground] (-1.5,-3) -- (1.5,-3);
+    
+    \tikzstyle{component top} = [voltpos] \tikzstyle{component bottom} = [voltmedpos]
+     \resistor{-1.5,0}
+    \tikzstyle{component top} = [voltpos] \tikzstyle{component bottom} = [voltneg]
+     \resistor{-0.5,-0.5}
+     \draw[voltpos] (-0.5,0) -- (-0.5,-0.5);
+     \draw[voltneg] (-0.5,-1.5) -- (-0.5,-2);
+    \tikzstyle{component top} = [voltpos] \tikzstyle{component bottom} = [voltsmallpos]
+     \resistor{0.5,-0.5}
+     \draw[voltpos] (0.5,0) -- (0.5,-0.5);
+     \draw[voltsmallpos] (0.5,-1.5) -- (0.5,-2);
+    \tikzstyle{component top} = [voltpos] \tikzstyle{component bottom} = [voltpos]
+     \resistor{1.5,0}
+    
+    \tikzstyle{component top} = [voltmedpos] \tikzstyle{component bottom} = [voltground]
+     \led[fliphorz]{-1.5,-1}
+     \draw[voltground] (-1.5,-1.5) -- (-1.5,-2);
+     \fill[red,opacity=0.1] (-1.5,-1.25) circle (0.3);
+    \tikzstyle{component top} = [voltpos]    \tikzstyle{component bottom} = [voltpos]
+     \led{1.5,-1}
+     \draw[voltpos] (1.5,-1.5) -- (1.5,-2);
+    
+    \tikzstyle{component top} = [voltground] \tikzstyle{component bottom} = [voltneg]
+     \capacitor[rotate={90}]{-1.5,-2}
+    \tikzstyle{component top} = [voltpos]    \tikzstyle{component bottom} = [voltsmallpos]
+     \capacitor[flipvert,rotate={270}]{1.5,-2}
+    
+    \tikzstyle{component top} = [voltground] \tikzstyle{component bottom} = [voltground] \tikzstyle{component base} = [voltsmallpos]
+     \transistor[fliphorz]{-1.5,-2}
+    \tikzstyle{component top} = [voltpos]    \tikzstyle{component bottom} = [voltground] \tikzstyle{component base} = [voltneg]
+     \transistor{1.5,-2}
+    
+    % bases to capacitors
+    \draw[voltsmallpos] (-1,-2.5) -- (-0.5,-2.5) -- (0.5,-2); \crossover[voltsmallpos,rotate={22.5}]{0,-2.25}
+    \draw[voltneg] (1,-2.5) -- (0.5,-2.5) -- (-0.5,-2);
+    
+    % legend
+    \begin{scope}[shift={(2,-1)}]
+     \draw[voltpos]      (0,0) -- (0.5,0)   node[right] {supply voltage};
+     \draw[voltmedpos]   (0,-0.25) -- (0.5,-0.25) node[right] {positive voltage ($<$ supply voltage)};
+     \draw[voltsmallpos] (0,-0.5) -- (0.5,-0.5) node[right] {cut-in voltage (0.6V)};
+     \draw[voltground]   (0,-0.75) -- (0.5,-0.75) node[right] {ground (0V)};
+     \draw[voltneg]      (0,-1) -- (0.5,-1) node[right] {negative voltage};
+    \end{scope}
+   \end{tikzpicture}
+   \caption{Voltages --- Colour}
+  \end{center}
+ \end{figure}
+\end{document}
